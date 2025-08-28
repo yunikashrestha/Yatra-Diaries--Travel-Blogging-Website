@@ -8,10 +8,12 @@ const Comments = () => {
   const userId = sessionStorage.getItem("login") || false;
   const { id } = useParams();
   const postId = id;
+  const [del,setDel]=useState(false);
 
   const [comment, setComment] = useState([]);
   const navigate = useNavigate();
 
+  //Adding a comment to backend 
   const addComment = async () => {
     if (!userId) {
       navigate("/landingPage");
@@ -28,20 +30,21 @@ const Comments = () => {
       console.log(e);
     }
   };
+
+
   useEffect(() => {
     const retrieveComment = async () => {
       try {
         const getcomment = await axios.get(
           `http://localhost:3000/retrieveComment/${postId}`
         );
-        // console.log(getcomment.data);
         setComment(getcomment.data.reverse());
       } catch (e) {
         console.log(e);
       }
     };
     retrieveComment();
-  }, [postId, caption]);
+  }, [postId, caption,del]);
 
   return (
     <div className="flex flex-col gap-5 rounded-l">
@@ -62,7 +65,7 @@ const Comments = () => {
       </div>
 
       {comment.map((value) => {
-        return <Comment comment={value} />;
+        return <Comment comment={value} del={del} setDel={setDel}/>;
       })}
     </div>
   );

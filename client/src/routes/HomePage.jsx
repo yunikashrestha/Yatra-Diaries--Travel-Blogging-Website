@@ -88,7 +88,7 @@ const HomePage = () => {
       {/* Animated Button*/}
 
       {/* CATEGORIES*/}
-      <MainCategories />
+      <MainCategories  setPost={setPost} />
 
       {/* FEATURE*/}
       <FeaturedPost post={post}/>

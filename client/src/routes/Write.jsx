@@ -45,7 +45,6 @@ const Write = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("shortDescription", shortDescription);
-        formData.append("category", category);
         formData.append("content", content);
         formData.append("userId", userId);
         formData.append("file", photo); // 'photo' should be the selected file object
@@ -124,22 +123,6 @@ const Write = () => {
             className=" text-gray-500 font-5xl font-semibold bg-transparent outline-none"
             onChange={(event) => setTitle(event.target.value)}
           ></input>
-          <div className="flex items-center gap-2">
-            <label htmlFor="">Choose a category:</label>
-            <select
-              name="cat"
-              id=""
-              className="p-2 rounded-xl bg-white outline-none shadow-lg"
-              onChange={(event) => setCategory(event.target.value)}
-            >
-              <option value="cultural-heritage">Culture </option>
-              <option value="wildlife-nationalpark">
-                Wildlife and National Park
-              </option>
-              <option value="hikes-natures">Treks and Hikes </option>
-              <option value="foods-cuisine">Foods and Cuisine</option>
-            </select>
-          </div>
           <textarea
             name="description"
             placeholder="A Short Description"

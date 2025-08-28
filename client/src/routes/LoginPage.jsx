@@ -25,6 +25,7 @@ const LoginPage = () => {
         if (result.data.success) {
           // console.log(result.data.id);
           sessionStorage.setItem("login", result.data.id);
+          sessionStorage.setItem("admin",result.data.isAdmin);
           // setError('Login Successful')
           toast.success("Login successful", {
             autoClose: 1500,

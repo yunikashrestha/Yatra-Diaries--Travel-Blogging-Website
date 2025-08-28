@@ -17,7 +17,7 @@ const FeaturedPost=({post})=>{
             {/* details */}
             <div className=" flex items-center gap-4 ">
                 <h1 className="font-semibold">01.</h1>
-                <Link className="text-blue-800 text-lg">{firstPost?.category}</Link>
+                <Link to={`/posts/${firstPost?.category}`} className="text-blue-800 text-lg">{firstPost?.category}</Link>
                 <span className="text-gray-500 ">{format(firstPost?.createdAt)}</span>
 
             </div>
@@ -41,7 +41,7 @@ const FeaturedPost=({post})=>{
         {/* details */}
         <div className="flex items-center gap-2 mb-3">
             <h1 className="font-semibold">02.</h1>
-            <Link to="" className="text-blue-800"> {secondPost?.category}</Link>
+            <Link to={`/posts/${secondPost?.category}`} className="text-blue-800"> {secondPost?.category}</Link>
             <span className="text-gray-500 text-sm ">{format(secondPost?.createdAt)}</span>
 
         </div>
@@ -61,7 +61,7 @@ const FeaturedPost=({post})=>{
         {/* details */}
         <div className="flex items-center gap-2 mb-3">
             <h1 className="font-semibold">03.</h1>
-            <Link to="" className="text-blue-800">{thirdPost?.category}</Link>
+            <Link to={`/posts/${thirdPost?.category}`}className="text-blue-800">{thirdPost?.category}</Link>
             <span className="text-gray-500 text-sm ">{format(thirdPost?.createdAt)}</span>
 
         </div>
@@ -80,7 +80,7 @@ const FeaturedPost=({post})=>{
         {/* details */}
         <div className="flex items-center gap-2 mb-3">
             <h1 className="font-semibold">04.</h1>
-            <Link to="" className="text-blue-800"> {fourthPost?.category}</Link>
+            <Link to={`/posts/${fourthPost?.category}`} className="text-blue-800"> {fourthPost?.category}</Link>
             <span className="text-gray-500 text-sm ">{format(fourthPost?.createdAt)}</span>
 
         </div>

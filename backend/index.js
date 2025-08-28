@@ -1,3 +1,4 @@
+const axios= require("axios");
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -10,6 +11,8 @@ const multer = require("multer");
 app.use(cors());
 const Comment = require("./model/comment.model");
 const path = require("path");
+
+
 
 
 mongoose
@@ -63,7 +66,7 @@ app.post("/login", async (req, res) => {
     if (!userData) {
       res.json({ success: false, message: "Incorrect Password" });
     } else {
-      res.json({ success: true, id: userData._id });
+      res.json({ success: true, id: userData._id,isAdmin:userData.isAdmin });
     }
   } catch (e) {}
 });
@@ -74,13 +77,30 @@ app.use("/uploads", express.static("uploads"));
 app.post("/addPost", upload.single("file"), async (req, res) => {
   try {
     // Extract fields from the request body
-    const { title, shortDescription, content, category, userId } = req.body;
+    const { title, shortDescription, content, userId } = req.body;
 
     // Get the uploaded file name if file is present
     const photo = req.file ? `uploads/${req.file.filename}` : null;
 
     // Create a new post document in the database
+    const result = await axios.post("http://localhost:8000/api/blogprediction", {
+      blog:content
+    });
+    let category= await result.data.category;
+    if(category=="culture"){
+      category="cultural-heritage"
+    }
+    else if(category=="food/cuisine"){
+      category="foods-cuisine"
+    }
+     else if(category=="wildlife/nationalpark"){
+      category="wildlife-nationalpark"
+    }
+     else if(category=="hike/trek"){
+      category="hikes-natures"
+    }
     const success = await Post.create({ title, shortDescription, content, category, userId, photo });
+    
 
     if (success) {
       // Send back the new post's id to the client
@@ -96,7 +116,6 @@ app.post("/addPost", upload.single("file"), async (req, res) => {
 
 app.get("/retrievePost/", async (req, res) => {
   //database ma vako sabai blog retrieve gareko hompage ma lyauna
-  
   const retrieve = await Post.find().populate(
     "userId",
     "_id fullname"
@@ -105,6 +124,27 @@ app.get("/retrievePost/", async (req, res) => {
     res.send(retrieve);
   } else {
     res.send("Not found");
+  }
+});
+
+// Search posts by title or content
+app.get("/searchPost", async (req, res) => {
+  try {
+    const query = req.query.query;
+    if (!query || !query.trim()) {
+      return res.status(400).send([]);
+    }
+    // Case-insensitive search in title or content
+    const posts = await Post.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { content: { $regex: query, $options: "i" } }
+      ]
+    }).populate("userId", "_id fullname");
+    res.send(posts);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send([]);
   }
 });
 
@@ -169,6 +209,96 @@ app.get("/retrievePostByCategory/:category", async (req, res) => {
     console.log(e);
   }
 });
+
+app.post('/predict', async (req, res) => {
+  try {
+    const blog= req.body.blog; 
+    
+    const result = await axios.post("http://localhost:8000/api/blogprediction", {
+      blog:blog
+    });
+
+    res.send(result.data); // only send the actual response data
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ error: "Error while predicting" });
+  }
+});
+
+app.post('/deleteComment',async(req,res)=>{
+  const commentId=req.body.id;
+  try{
+    const result=await Comment.findByIdAndDelete(commentId)
+    if(result){
+      res.send("Comment deleted successfully")
+    }
+      else{
+        res.send("Failed to delete comment")
+      
+      
+    }
+  }
+    catch(e)
+    {
+      res.send(e);
+    }
+})
+
+app.post('/deletePost',async(req,res)=>{
+  const postId=req.body.id;
+  try{
+    const result=await Post.findByIdAndDelete(postId)
+    if(result){
+      res.send("Post deleted successfully!!")
+    }
+      else{
+        res.send("Failed to delete post!!")
+      
+      
+    }
+  }
+    catch(e)
+    {
+      res.send(e);
+    }
+})
+app.post('/updatePost',upload.single("photo"),async(req,res)=>{
+ try {
+    // Extract fields from the request body
+    const { title, shortDescription, content, userId ,postId } = req.body;
+
+    // Get the uploaded file name if file is present
+    const photo = req.file ? `uploads/${req.file.filename}` : null;
+
+    // Create a new post document in the database
+    const result = await axios.post("http://localhost:8000/api/blogprediction", {
+      blog:content
+    });
+    let category= await result.data.category;
+    if(category=="culture"){
+      category="cultural-heritage"
+    }
+    else if(category=="food/cuisine"){
+      category="foods-cuisine"
+    }
+     else if(category=="wildlife/nationalpark"){
+      category="wildlife-nationalpark"
+    }
+     else if(category=="hike/trek"){
+      category="hikes-natures"
+    }
+    const success = await Post.findByIdAndUpdate(postId,{ title, shortDescription, content, category, userId, photo },{new:true});
+    if (success) {
+      // Send back the new post's id to the client
+      res.send(success._id);
+    } else {
+      res.send("Could not add blog");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+})
 
 app.listen(PORT, () => {
   console.log(`Servers is running in, http://localhost:${PORT}`);

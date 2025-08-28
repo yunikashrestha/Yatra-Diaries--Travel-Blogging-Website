@@ -28,7 +28,7 @@ const Navbar = () => {
       {/* DESKTOP MENU */}
       <div className="flex items-center gap-8 font-bold">
         <Link to="/">Home</Link>
-        <Link to="/">About</Link>
+        <Link to="/about">About</Link>
 
         {!isLoggedIn && (
           <Link to="/login">

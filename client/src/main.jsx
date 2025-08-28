@@ -12,7 +12,8 @@ import Write from "./routes/Write.jsx";
 import SinglePostPage from "./routes/SinglePostPage.jsx";
 import MainLayout from "./Layout/MainLayout.jsx";
 import LandingPage from "./routes/LandingPage.jsx";
-
+import UpdatePage from "./routes/UpdatePage.jsx";
+import AboutPage from "./routes/About.jsx";
 
 const router = createBrowserRouter([
  
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <RegisterPage />,
+      },
+      {
+        path:"/update",
+        element:<UpdatePage/>
+      },
+      {
+        path:"/about",
+        element:<AboutPage/>
       }
      
   
