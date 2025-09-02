@@ -16,15 +16,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=[""],  # Allow all methods (GET, POST, etc.)
-    allow_headers=[""],  # Allow all headers
+    allow_methods=[""],  
+    allow_headers=[""],  
 )
 
-# --- Pydantic Models for Request/Response Validation ---
 class BlogPredictionRequest(BaseModel):
     blog: str
     
-# --- API Endpoints ---
 @app.get("/")
 async def root():
     return {"message": "Welcome to the FastAPI Python Backend!"}
@@ -43,6 +41,5 @@ async def blog_prediction(request: BlogPredictionRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in predicting: {str(e)}")
 
-# You can optionally run the app directly from this file for testing
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000) # Run on a different port than Node.js
+    uvicorn.run(app, host="0.0.0.0", port=8000)

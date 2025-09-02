@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
  
 
 const MainCategories = ({ category, onSearchResults, setPost }) => {
+    const navigate = useNavigate();
     const [transition, setTransition] = useState(category || "All Post");
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(false);
@@ -11,18 +12,9 @@ const MainCategories = ({ category, onSearchResults, setPost }) => {
     const handleSearch = async (e) => {
         if (e.key === "Enter" && search.trim()) {
             setLoading(true);
-            try {
-                // Backend endpoint for searching posts (by title/content)
-                const res = await axios.get(`http://localhost:3000/searchPost?query=${encodeURIComponent(search)}`);
-                if (onSearchResults) {
-                    onSearchResults(res.data);
-                } else {
-                    setPost(res.data);
-                }
-            } catch (err) {
-                alert("Error searching posts");
-            }
+            navigate(`/search?q=${encodeURIComponent(search.trim())}`);
             setLoading(false);
+            setSearch("");
         }
     };
 

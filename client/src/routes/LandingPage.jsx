@@ -14,9 +14,9 @@ const LandingPage = () => {
                 class="logo"
                 width="150"
                 height="50"
-                loading="lazy"
+                loading="lazy"/>
                 
-              />
+              
             </div>
             <div className="text-center">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-6">

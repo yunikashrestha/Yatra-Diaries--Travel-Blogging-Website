@@ -1,6 +1,6 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import Comments from "../components/Comments";
-import { useParams } from "react-router-dom"; //URL mathi bata parameter tancha
+import { useParams } from "react-router-dom"; 
 import { useEffect, useState } from "react";
 import { format } from "timeago.js";
 import Navbar from "../components/Navbar";
@@ -50,37 +50,46 @@ const SinglePostPage = () => {
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div className="flex flex-col md:flex-row gap-12 mb-12">
-          <div className="md:w-3/5 flex flex-col gap-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-              {post.title}
-            </h1>
-
-            <div className="flex items-center gap-3 text-gray-600 text-sm">
-              <span>Written by</span>
-              <Link className="font-medium text-indigo-600 hover:text-indigo-700">
-                {post.userId?.fullname}
-              </Link>
-              <span>•</span>
-              <Link className="font-medium text-indigo-600 hover:text-indigo-700">
-                {post.category}
-              </Link>
-              <span>•</span>
-              <span>{format(post.createdAt)}</span>
-            </div>
-
-            <div className="text-lg text-gray-600 leading-relaxed">
-              {post.shortDescription}
-            </div>
+        <div className="relative mb-12">
+          {/* Cover Image */}
+          <div className="w-full h-[60vh] rounded-2xl overflow-hidden shadow-2xl mb-8">
+            <img
+              src={`http://localhost:3000/${post.photo}`}
+              className="w-full h-full object-cover"
+              alt={post.title}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           </div>
 
-          <div className="md:w-2/5">
-            <div className="aspect-video overflow-hidden rounded-xl shadow-lg">
-              <img
-                src={`http://localhost:3000/${post.photo}`}
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
-                alt={post.title}
-              />
+          {/* Post Info Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+            <div className="max-w-4xl">
+              {/* Category Badge */}
+              <Link to={`/posts/${post.category}`} className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4 hover:bg-white/30 transition-colors">
+                {post.category}
+              </Link>
+
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
+                {post.title}
+              </h1>
+
+              <div className="flex items-center gap-4 text-white/90 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <Link to={`/profile/${post.userId?._id}`} className="text-indigo-600 font-semibold text-lg">
+                      {post.userId?.fullname?.[0]?.toUpperCase()}
+                    </Link>
+                  </div>
+                  <div>
+                    <Link to={`/profile/${post.userId?._id}`} className="font-medium hover:text-white">
+                      {post.userId?.fullname}
+                    </Link>
+                    <p className="text-white/70 text-xs">Travel Enthusiast</p>
+                  </div>
+                </div>
+                <span>•</span>
+                <span>{format(post.createdAt)}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -89,9 +98,14 @@ const SinglePostPage = () => {
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Main Content */}
           <div className="lg:w-3/4">
-            <article className="prose prose-lg max-w-none">
+            {/* Short Description */}
+            <div className="text-xl text-gray-600 leading-relaxed mb-12 p-6 bg-gray-50 rounded-xl border border-gray-100 italic">
+              {post.shortDescription}
+            </div>
+
+            <article className="prose prose-lg max-w-none prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-indigo-600 prose-img:rounded-xl">
               <div
-                className="text-gray-700 leading-relaxed"
+                className="leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               ></div>
             </article>
@@ -101,23 +115,23 @@ const SinglePostPage = () => {
           <aside className="lg:w-1/4">
             <div className="sticky top-8 space-y-8">
               {/* Author Card */}
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                  Author
+                  About the Author
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                      <span className="text-indigo-600 font-semibold text-xl">
+                    <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+                      <span className="text-indigo-600 font-semibold text-2xl">
                         {post.userId?.fullname?.[0]?.toUpperCase()}
                       </span>
                     </div>
                     <div>
-                      <Link className="font-medium text-gray-800 hover:text-indigo-600">
+                      <Link to={`/profile/${post.userId?._id}`} className="font-medium text-gray-800 hover:text-indigo-600 block mb-1">
                         {post.userId?.fullname}
                       </Link>
                       <p className="text-sm text-gray-500">
-                        Blog Writer, Explorer, Photographer
+                        Travel Blogger & Photographer
                       </p>
                     </div>
                   </div>
@@ -125,26 +139,30 @@ const SinglePostPage = () => {
               </div>
 
               {/* Actions Card */}
-              {(userId === post.userId?._id || isAdmin=="true") && (
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              {(userId === post.userId?._id || isAdmin==="true") && (
+                <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow">
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    Actions
+                    Post Actions
                   </h2>
                   <div className="space-y-3">
                     <button
                       onClick={editPost}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                     >
-                      <span>💾</span>
-                      <span>Edit this post</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                      <span>Edit Post</span>
                     </button>
 
                     <button
                       onClick={deletePost}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
                     >
-                      <span>🗑️</span>
-                      <span>Delete this post</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <span>Delete Post</span>
                     </button>
                   </div>
                 </div>
@@ -154,7 +172,7 @@ const SinglePostPage = () => {
         </div>
 
         {/* Comments Section */}
-        <div className="mt-16">
+        <div className="mt-16 bg-gray-50 rounded-2xl p-8 border border-gray-100">
           <Comments />
         </div>
       </div>

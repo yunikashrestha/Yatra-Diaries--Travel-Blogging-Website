@@ -38,6 +38,10 @@ const RegisterPage = () => {
     else {
       try {
         const result = await axios.post("http://localhost:3000/register", { fullname, email, password })
+        if(result.data=="Email already exist"){
+          toast.error(result.data)
+          return
+        }
         toast.success(result.data);
         setTimeout(()=>{
           navigate('/login')

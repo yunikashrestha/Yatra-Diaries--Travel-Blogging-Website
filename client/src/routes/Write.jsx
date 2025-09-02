@@ -92,24 +92,38 @@ const Write = () => {
   return (
     <>
       <Navbar />
-      <div className=" flex flex-col gap-7">
-        <h1 className="text-xl underline mt-5 ">Create a new post</h1>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Create Your Travel Story</h1>
         <form
-          className="flex flex-col gap-6 max-h-[90vh]"
+          className="flex flex-col gap-8"
           onSubmit={postSubmit}
         >
-          <button
-            className="w-max p-3 rounded-xl bg-white text-sm shadow-lg text-black"
-            onClick={() => photoRef.current.click()}
-          >
-            Add a cover picture
-          </button>
-          <div className="h-[300px] w-[300px] rounded-xl">
-            <img
-              src={photo ? URL.createObjectURL(photo) : ""}
-              className="h-full w-full object-cover rounded-xl"
-            />
+          {/* Cover Image Section */}
+          <div className="space-y-4">
+            <button
+              className="px-6 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium hover:bg-blue-100 transition-colors duration-200 flex items-center gap-2"
+              onClick={() => photoRef.current.click()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Add Cover Image
+            </button>
+            <div className="w-full h-[400px] rounded-xl bg-gray-50 overflow-hidden">
+              {photo ? (
+                <img
+                  src={URL.createObjectURL(photo)}
+                  className="h-full w-full object-cover"
+                  alt="Cover preview"
+                />
+              ) : (
+                <div className="h-full w-full flex items-center justify-center text-gray-400">
+                  No image selected
+                </div>
+              )}
+            </div>
           </div>
+          
           <input
             type="file"
             accept="image/*"
@@ -117,33 +131,53 @@ const Write = () => {
             className="hidden"
             onChange={(event) => setPhoto(event.target.files[0])}
           />
+
+          {/* Title Input */}
           <input
             type="text"
-            placeholder="Title Here"
-            className=" text-gray-500 font-5xl font-semibold bg-transparent outline-none"
+            placeholder="Write your title here..."
+            className="text-3xl font-semibold text-gray-800 bg-transparent outline-none border-b-2 border-gray-200 focus:border-blue-500 transition-colors duration-200 pb-2"
             onChange={(event) => setTitle(event.target.value)}
-          ></input>
-          <textarea
-            name="description"
-            placeholder="A Short Description"
-            className="rounded-xl p-7 shadow-md text-sm outline-none"
-            onChange={(event) => setShortDescription(event.target.value)}
-          ></textarea>
-          <ReactQuill
-            ref={quillRef}
-            theme="snow"
-            className="rounded-xl bg-white shadow-md flex-1"
-            value={content}
-            onChange={setContent}
           />
 
-          <div className="text-red-600">{error}</div>
+          {/* Short Description */}
+          <div className="space-y-2">
+            <label htmlFor="description" className="text-sm font-medium text-gray-700">Short Description</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Add a brief description of your travel story..."
+              className="w-full p-4 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 min-h-[100px] text-gray-700"
+              value={shortDescription}
+              onChange={(event) => setShortDescription(event.target.value)}
+              maxLength={500}
+            />
+          </div>
 
+          {/* Rich Text Editor */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <ReactQuill
+              ref={quillRef}
+              theme="snow"
+              className="min-h-[300px]"
+              value={content}
+              onChange={setContent}
+            />
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-800 rounded-xl px-3 py-2 text-white w-36"
+            className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 self-end"
           >
-            Send
+            Publish Story
           </button>
         </form>
       </div>

@@ -14,6 +14,10 @@ import MainLayout from "./Layout/MainLayout.jsx";
 import LandingPage from "./routes/LandingPage.jsx";
 import UpdatePage from "./routes/UpdatePage.jsx";
 import AboutPage from "./routes/About.jsx";
+import Profile from "./routes/profile.jsx";
+import Search from "./routes/Search.jsx";
+import Admin from "./routes/Admin.jsx";
+
 
 const router = createBrowserRouter([
  
@@ -52,6 +56,18 @@ const router = createBrowserRouter([
       {
         path:"/about",
         element:<AboutPage/>
+      },
+      {
+        path:'/profile/:id',
+        element:<Profile/>
+      },
+      {
+        path:'/search',
+        element:<Search/>
+      },
+      {
+        path:'/admin',
+        element:<Admin/>
       }
      
   

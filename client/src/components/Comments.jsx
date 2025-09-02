@@ -2,35 +2,41 @@ import { useState, useEffect } from "react";
 import Comment from "./Comment";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Comments = () => {
   const [caption, setCaption] = useState();
   const userId = sessionStorage.getItem("login") || false;
   const { id } = useParams();
   const postId = id;
-  const [del,setDel]=useState(false);
+  const [del, setDel] = useState(false);
 
   const [comment, setComment] = useState([]);
   const navigate = useNavigate();
 
-  //Adding a comment to backend 
+  //Adding a comment to backend
   const addComment = async () => {
     if (!userId) {
       navigate("/landingPage");
     }
+
     try {
+      if(caption==""){
+        toast.error("Comment Field cannot be empty")
+        return
+      }
       const res = await axios.post("http://localhost:3000/addComment", {
         caption,
         userId,
         postId,
       });
+
       setCaption("");
       console.log(res.data);
     } catch (e) {
       console.log(e);
     }
   };
-
 
   useEffect(() => {
     const retrieveComment = async () => {
@@ -44,7 +50,7 @@ const Comments = () => {
       }
     };
     retrieveComment();
-  }, [postId, caption,del]);
+  }, [postId, caption, del]);
 
   return (
     <div className="flex flex-col gap-5 rounded-l">
@@ -65,7 +71,7 @@ const Comments = () => {
       </div>
 
       {comment.map((value) => {
-        return <Comment comment={value} del={del} setDel={setDel}/>;
+        return <Comment comment={value} del={del} setDel={setDel} />;
       })}
     </div>
   );

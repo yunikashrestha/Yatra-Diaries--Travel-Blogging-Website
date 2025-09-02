@@ -14,7 +14,7 @@ const PostListItem=({post})=>{//{post}=>props(properties that can be shared betn
 
                 <div className="flex items-center text-sm text-gray-400 gap-2 w-2/3">
                     <span>Written by</span>
-                    <Link className="text-blue-800">{post.userId?.fullname}</Link>
+                    <Link to={`/profile/${post.userId?._id}`} className="text-blue-800">{post.userId?.fullname}</Link>
                     <span>on</span>
                     <Link to={`/posts/${post.category}`}className="text-blue-800">{post.category}</Link>
                     <span>{format(post.createdAt)}</span>

@@ -37,12 +37,6 @@ const AboutPage = () => (
           <p className="text-gray-600 mb-4">
             Whether you’re a traveler, writer, or simply curious, Yatra Diaries welcomes you to explore, share, and connect.
           </p>
-          <Link
-            to="/register"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
-          >
-            Get Started
-          </Link>
         </div>
       </div>
     </div>

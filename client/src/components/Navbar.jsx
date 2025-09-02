@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Navbar = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isAdmin=sessionStorage.getItem('admin')
 
   // Check login status on component mount
   const loginStatus = sessionStorage.getItem("login");
@@ -14,6 +15,7 @@ const Navbar = () => {
 
   function logout() {
     sessionStorage.removeItem("login");
+     sessionStorage.removeItem("admin");
     setIsLoggedIn(false); // update the state so it re-renders
   }
 
@@ -29,6 +31,13 @@ const Navbar = () => {
       <div className="flex items-center gap-8 font-bold">
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
+        {isAdmin=="true" && 
+        <Link to="/admin">Admin</Link>}
+
+
+        {isLoggedIn && (
+          <Link to={`/profile/${loginStatus}`}>Profile</Link>
+        )}
 
         {!isLoggedIn && (
           <Link to="/login">

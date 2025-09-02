@@ -85,7 +85,6 @@ const HomePage = () => {
         </Link>
       </div>
 
-      {/* Animated Button*/}
 
       {/* CATEGORIES*/}
       <MainCategories  setPost={setPost} />
